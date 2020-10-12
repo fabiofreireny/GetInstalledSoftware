@@ -24,12 +24,12 @@ $exclude = @(
 
 $sb32 = {
     Get-ChildItem -Path HKLM:\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall | 
-    Get-ItemProperty | Select-Object -Property DisplayName, DisplayVersion | Where DisplayName 
+    Get-ItemProperty | Select-Object -Property DisplayName, DisplayVersion, Publisher, InstallDate | Where DisplayName 
 }
 
 $sb64 = {
     Get-ChildItem -Path HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall | 
-    Get-ItemProperty | Select-Object -Property DisplayName, DisplayVersion | Where DisplayName  
+    Get-ItemProperty | Select-Object -Property DisplayName, DisplayVersion, Publisher, InstallDate | Where DisplayName  
 }
 #Get full list of installed SW (32 and 64 bit)
 #WMI is too slow, going directly to registry instead
@@ -49,6 +49,6 @@ $exclude = ($exclude -join '|')
 
 #remove excluded items, remove duplicate items and sort output
 $installedSoftware = $SoftwareDump | ? displayName -notmatch $exclude |
-    select -Property displayname, displayversion -Unique | Sort-Object -Property DisplayName
+    select -Property DisplayName, DisplayVersion, Publisher, InstallDate -Unique | Sort-Object -Property DisplayName
 
 $installedSoftware
